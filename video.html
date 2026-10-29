@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Video Influencer — Sportify</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,700;1,800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="assets/tw-config.js"></script>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="video" class="loading">
+
+  <div id="preloader">
+    <div class="pl-inner">
+      <div class="pl-logo">SPORT<span>IFY</span></div>
+      <div id="pl-num">0%</div>
+      <div class="pl-track"><div id="pl-bar"></div></div>
+      <div class="pl-text">Memuat...</div>
+    </div>
+  </div>
+  <div id="scroll-progress"></div>
+  <header id="site-header"></header>
+
+  <main class="pt-32">
+    <section class="max-w-7xl mx-auto px-5">
+      <p class="reveal text-lime font-bold text-sm tracking-[.2em]"><span class="slashes"></span> VIDEO INFLUENCER FITNES</p>
+      <h1 class="reveal font-display italic font-extrabold text-6xl md:text-8xl leading-[.9] mt-3" data-delay="100">NYALAKAN <span class="text-lime">MOTIVASI</span></h1>
+      <p class="reveal mt-5 text-neutral-300 max-w-2xl" data-delay="200">
+        Kumpulan kreator fitnes yang bisa jadi sumber semangat ngegym. Klik kartu untuk membuka channel mereka di YouTube.
+      </p>
+    </section>
+
+    <!-- Generator motivasi -->
+    <section class="max-w-7xl mx-auto px-5 mt-12">
+      <div class="reveal relative overflow-hidden rounded-xl bg-lime text-ink p-8 md:p-12">
+        <div class="absolute -right-10 -top-10 w-56 h-56 rounded-full bg-ink/10 spin-slow"></div>
+        <p class="font-bold text-xs tracking-[.25em]">PESAN HARI INI</p>
+        <p id="quote" class="font-display italic font-extrabold text-4xl md:text-6xl leading-none mt-3 min-h-[3.2em] md:min-h-[2.2em] transition-opacity duration-300">Satu sesi latihan lebih baik daripada nol.</p>
+        <button id="quote-btn" class="btn bg-ink text-white mt-5"> Pesan Lainnya</button>
+      </div>
+    </section>
+
+    <!-- Filter -->
+    <section class="max-w-7xl mx-auto px-5 mt-16">
+      <div class="flex flex-wrap items-center gap-3" id="filters">
+        <span class="text-sm text-neutral-400 mr-2">Kategori:</span>
+        <button class="chip active" data-tag="all">Semua</button>
+        <button class="chip" data-tag="Sains">Sains &amp; Teknik</button>
+        <button class="chip" data-tag="Vlog">Vlog &amp; Motivasi</button>
+        <button class="chip" data-tag="Lokal">Indonesia</button>
+      </div>
+      <div id="creator-grid" class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </section>
+
+    <!-- Manfaat & Risiko menonton -->
+    <section class="max-w-7xl mx-auto px-5 mt-20">
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="reveal rounded-xl border border-lime/30 bg-lime/5 p-7">
+          <h2 class="font-display italic font-extrabold text-3xl text-lime">MANFAAT</h2>
+          <ul class="mt-3 space-y-2 text-sm text-neutral-200">
+            <li class="flex gap-2"><span class="text-lime font-bold">✓</span> Menjaga semangat dan konsistensi latihan</li>
+            <li class="flex gap-2"><span class="text-lime font-bold">✓</span> Belajar teknik gerakan dan program dari praktisi</li>
+            <li class="flex gap-2"><span class="text-lime font-bold">✓</span> Mendapat ide variasi latihan dan pola makan</li>
+            <li class="flex gap-2"><span class="text-lime font-bold">✓</span> Merasa jadi bagian dari komunitas yang punya tujuan sama</li>
+          </ul>
+        </div>
+        <div class="reveal rounded-xl border border-red-500/30 bg-red-500/5 p-7" data-delay="150">
+          <h2 class="font-display italic font-extrabold text-3xl text-red-400">RISIKO</h2>
+          <ul class="mt-3 space-y-2 text-sm text-neutral-200">
+            <li class="flex gap-2"><span class="text-red-400 font-bold">!</span> Membandingkan diri dengan fisik atlet profesional yang tidak realistis bagi kebanyakan orang</li>
+            <li class="flex gap-2"><span class="text-red-400 font-bold">!</span> Meniru program atau beban mentah-mentah tanpa menyesuaikan kemampuan, memicu cedera</li>
+            <li class="flex gap-2"><span class="text-red-400 font-bold">!</span> Tidak semua klaim di media sosial berbasis bukti, saring dan verifikasi dulu</li>
+            <li class="flex gap-2"><span class="text-red-400 font-bold">!</span> Terlalu banyak menonton tanpa mulai berlatih</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script>
+    // Link mengarah ke hasil pencarian YouTube agar selalu valid.
+    // Ganti "yt" dengan URL channel resmi jika ingin langsung ke channel.
+    const q = s => 'https://www.youtube.com/results?search_query=' + encodeURIComponent(s);
+    const creators = [
+      { name: 'Jeff Nippard', tag: 'Sains', focus: 'Latihan berbasis sains', desc: 'Menjelaskan hipertrofi dan program latihan berdasarkan penelitian.', yt: q('Jeff Nippard') },
+      { name: 'Jeremy Ethier', tag: 'Sains', focus: 'Teknik & sains latihan', desc: 'Penjelasan teknik gerakan dan mekanisme pembentukan otot yang mudah dipahami.', yt: q('Jeremy Ethier') },
+      { name: 'ATHLEAN-X', tag: 'Sains', focus: 'Latihan & pencegahan cedera', desc: 'Video latihan, koreksi form, dan tips pencegahan cedera.', yt: q('ATHLEAN-X') },
+      { name: 'Chris Bumstead', tag: 'Vlog', focus: 'Bodybuilding klasik', desc: 'Konten latihan dan perjalanan seorang atlet bodybuilding profesional.', yt: q('Chris Bumstead') },
+      { name: 'Sam Sulek', tag: 'Vlog', focus: 'Vlog latihan harian', desc: 'Dokumentasi sesi latihan yang apa adanya dan bikin semangat.', yt: q('Sam Sulek') },
+      { name: 'Natacha Océane', tag: 'Vlog', focus: 'Latihan & gaya hidup sehat', desc: 'Program latihan dan tips kebugaran, populer di kalangan wanita.', yt: q('Natacha Oceane') },
+      { name: 'Ade Rai', tag: 'Lokal', focus: 'Kebugaran Indonesia', desc: 'Binaragawan senior Indonesia yang aktif membahas gaya hidup sehat dan latihan.', yt: q('Ade Rai fitness') }
+    ];
+    const tagLabel = { Sains: 'Sains & Teknik', Vlog: 'Vlog & Motivasi', Lokal: 'Indonesia' };
+    const initials = n => n.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+
+    const grid = document.getElementById('creator-grid');
+    function render(tag) {
+      const data = tag === 'all' ? creators : creators.filter(c => c.tag === tag);
+      grid.innerHTML = data.map((c, i) => `
+        <a href="${c.yt}" target="_blank" rel="noopener" class="reveal spot tilt group block overflow-hidden" data-delay="${(i % 3) * 100}">
+          <div class="relative h-40 bg-gradient-to-br from-lime/25 via-panel to-ink grid place-items-center overflow-hidden">
+            <span class="font-display italic font-extrabold text-8xl text-lime/90 group-hover:scale-125 transition duration-500">${initials(c.name)}</span>
+            <span class="absolute top-3 left-3 text-[11px] font-bold px-3 py-1 rounded-full bg-lime text-ink">${tagLabel[c.tag]}</span>
+            <span class="absolute bottom-3 right-3 w-11 h-11 rounded-full bg-lime text-ink grid place-items-center text-lg opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition">▶</span>
+          </div>
+          <div class="p-6">
+            <h3 class="font-display italic font-extrabold text-3xl leading-none">${c.name}</h3>
+            <p class="text-lime text-xs font-bold tracking-widest mt-2">${c.focus.toUpperCase()}</p>
+            <p class="text-sm text-neutral-400 mt-3">${c.desc}</p>
+            <p class="mt-4 text-sm font-bold text-lime group-hover:translate-x-2 transition">Buka di YouTube →</p>
+          </div>
+        </a>`).join('');
+      if (window.Sportify) Sportify.refresh();
+    }
+    render('all');
+
+    document.getElementById('filters').addEventListener('click', e => {
+      const c = e.target.closest('.chip');
+      if (!c) return;
+      document.querySelectorAll('#filters .chip').forEach(x => x.classList.remove('active'));
+      c.classList.add('active');
+      render(c.dataset.tag);
+    });
+
+    // Pesan motivasi
+    const quotes = [
+      'Satu sesi latihan lebih baik daripada nol.',
+      'Disiplin mengalahkan motivasi.',
+      'Progres kecil tiap hari menjadi hasil besar.',
+      'Bandingkan dirimu dengan dirimu kemarin.',
+      'Datang dulu ke gym, urusan semangat belakangan.',
+      'Tubuhmu mampu, yakinkan pikiranmu.',
+      'Istirahat juga bagian dari latihan.',
+      'Konsisten itu membosankan, dan itulah yang berhasil.'
+    ];
+    let qi = 0;
+    const qEl = document.getElementById('quote');
+    document.getElementById('quote-btn').addEventListener('click', () => {
+      qEl.style.opacity = 0;
+      setTimeout(() => {
+        let n; do { n = Math.floor(Math.random() * quotes.length); } while (n === qi);
+        qi = n; qEl.textContent = quotes[qi]; qEl.style.opacity = 1;
+      }, 250);
+    });
+  </script>
+  <script src="assets/app.js"></script>
+</body>
+</html>

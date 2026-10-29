@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hitung BMR — Sportify</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,700;1,800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="assets/tw-config.js"></script>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="bmr" class="loading">
+
+  <div id="preloader">
+    <div class="pl-inner">
+      <div class="pl-logo">SPORT<span>IFY</span></div>
+      <div id="pl-num">0%</div>
+      <div class="pl-track"><div id="pl-bar"></div></div>
+      <div class="pl-text">Memuat...</div>
+    </div>
+  </div>
+  <div id="scroll-progress"></div>
+  <header id="site-header"></header>
+
+  <main class="pt-32">
+    <section class="max-w-5xl mx-auto px-5">
+      <p class="reveal text-lime font-bold text-sm tracking-[.2em]"><span class="slashes"></span> KALKULATOR</p>
+      <h1 class="reveal font-display italic font-extrabold text-6xl md:text-8xl leading-[.9] mt-3" data-delay="100">HITUNG <span class="text-lime">BMR</span></h1>
+      <p class="reveal mt-5 text-neutral-300 max-w-2xl" data-delay="200">
+        BMR (Basal Metabolic Rate) adalah perkiraan kalori yang dibakar tubuh saat istirahat total untuk menjalankan fungsi dasar. Rumus yang dipakai: Mifflin-St Jeor.
+      </p>
+
+      <div class="grid lg:grid-cols-2 gap-6 mt-10">
+        <!-- Form -->
+        <form id="bmr-form" class="reveal spot p-7 space-y-5">
+          <div>
+            <label class="text-sm font-bold">Jenis Kelamin</label>
+            <div class="grid grid-cols-2 gap-3 mt-2">
+              <label class="chip text-center ripple"><input type="radio" name="gender" value="male" class="hidden" checked> Pria</label>
+              <label class="chip text-center ripple"><input type="radio" name="gender" value="female" class="hidden"> Wanita</label>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-3">
+            <div><label class="text-sm font-bold">Umur</label><input id="age" type="number" min="15" max="100" placeholder="tahun" class="field mt-2" required></div>
+            <div><label class="text-sm font-bold">Tinggi</label><input id="height" type="number" min="100" max="250" placeholder="cm" class="field mt-2" required></div>
+            <div><label class="text-sm font-bold">Berat</label><input id="weight" type="number" min="30" max="300" step="0.1" placeholder="kg" class="field mt-2" required></div>
+          </div>
+          <div class="rounded-lg border border-line bg-ink/60 p-4">
+            <p class="text-sm font-bold">Opsional: lingkar tubuh <span class="text-neutral-500 font-normal">(agar estimasi lemak lebih akurat)</span></p>
+            <div class="grid grid-cols-3 gap-3 mt-3">
+              <div><label class="text-xs text-neutral-400">Pinggang (cm)</label><input id="waist" type="number" min="40" max="200" step="0.1" placeholder="cm" class="field mt-1"></div>
+              <div><label class="text-xs text-neutral-400">Leher (cm)</label><input id="neck" type="number" min="20" max="70" step="0.1" placeholder="cm" class="field mt-1"></div>
+              <div id="hip-wrap" class="hidden"><label class="text-xs text-neutral-400">Pinggul (cm)</label><input id="hip" type="number" min="50" max="200" step="0.1" placeholder="cm" class="field mt-1"></div>
+            </div>
+            <p class="text-xs text-neutral-500 mt-2">Tanpa data ini, persen lemak dihitung dari BMI, umur, dan jenis kelamin (kurang akurat bagi orang berotot).</p>
+          </div>
+          <button type="submit" class="btn btn-lime w-full justify-center">Hitung BMR &amp; Komposisi Tubuh</button>
+          <p id="err" class="text-sm text-red-400 hidden"></p>
+        </form>
+
+        <!-- Hasil -->
+        <div class="reveal spot p-7 flex flex-col justify-center text-center" data-delay="150">
+          <p class="text-xs font-bold tracking-[.25em] text-neutral-400">BMR KAMU</p>
+          <p class="font-display italic font-extrabold text-8xl text-lime leading-none mt-2"><span id="bmr-val">0</span></p>
+          <p class="text-neutral-400 mt-1">kalori / hari</p>
+          <div id="bmr-extra" class="mt-6 hidden">
+            <p class="text-sm text-neutral-300">Setara sekitar <b id="bmr-hour" class="text-white"></b> kkal per jam saat istirahat.</p>
+            <a id="to-kalori" href="kalori.html" class="btn btn-lime mt-5">Lanjut Hitung Kalori Harian <span class="arrow">→</span></a>
+          </div>
+          <p id="bmr-hint" class="text-sm text-neutral-500 mt-6">Isi data di samping lalu tekan “Hitung BMR”.</p>
+        </div>
+      </div>
+
+      <!-- Komposisi tubuh -->
+      <div id="comp" class="hidden mt-8 spot p-7">
+        <div class="flex flex-wrap items-baseline justify-between gap-2">
+          <h2 class="font-display italic font-extrabold text-4xl">KOMPOSISI <span class="text-lime">TUBUH</span></h2>
+          <p id="c-method" class="text-xs text-neutral-500"></p>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mt-6 text-center">
+          <div class="rounded-lg bg-ink border border-line p-4">
+            <p class="text-xs text-neutral-400">Lemak Tubuh</p>
+            <p class="font-display italic font-extrabold text-4xl text-lime"><span id="c-bf">0</span>%</p>
+            <p id="c-bfcat" class="text-xs font-bold mt-1"></p>
+          </div>
+          <div class="rounded-lg bg-ink border border-line p-4">
+            <p class="text-xs text-neutral-400">Massa Lemak</p>
+            <p class="font-display italic font-extrabold text-4xl"><span id="c-fm">0</span> <span class="text-lg">kg</span></p>
+          </div>
+          <div class="rounded-lg bg-ink border border-line p-4">
+            <p class="text-xs text-neutral-400">Massa Bebas Lemak</p>
+            <p class="font-display italic font-extrabold text-4xl"><span id="c-lbm">0</span> <span class="text-lg">kg</span></p>
+          </div>
+          <div class="rounded-lg bg-ink border border-line p-4">
+            <p class="text-xs text-neutral-400">FMI (indeks lemak)</p>
+            <p class="font-display italic font-extrabold text-4xl"><span id="c-fmi">0</span></p>
+            <p id="c-fmicat" class="text-xs font-bold mt-1"></p>
+          </div>
+          <div class="rounded-lg bg-ink border border-line p-4 col-span-2 lg:col-span-1">
+            <p class="text-xs text-neutral-400">FFMI (indeks otot)</p>
+            <p class="font-display italic font-extrabold text-4xl"><span id="c-ffmi">0</span></p>
+            <p id="c-ffmicat" class="text-xs font-bold mt-1"></p>
+          </div>
+        </div>
+
+        <div class="mt-6">
+          <div class="flex justify-between text-xs text-neutral-400 mb-1"><span>Massa lemak</span><span>Massa bebas lemak</span></div>
+          <div class="h-3 rounded bg-line overflow-hidden flex">
+            <div id="c-barfat" class="h-3 bg-yellow-400 transition-all duration-700" style="width:0"></div>
+            <div id="c-barlbm" class="h-3 bg-lime transition-all duration-700" style="width:0"></div>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4 mt-6 text-sm text-neutral-400">
+          <p><b class="text-neutral-200">FMI</b> = massa lemak (kg) ÷ tinggi² (m). <b class="text-neutral-200">FFMI</b> = massa bebas lemak (kg) ÷ tinggi² (m).</p>
+          <p>Massa bebas lemak mencakup otot, tulang, organ, dan cairan, jadi bukan massa otot murni. FFMI dipakai sebagai indikator kasar kepadatan otot.</p>
+        </div>
+      </div>
+
+      <!-- Manfaat & risiko -->
+      <div class="grid md:grid-cols-2 gap-6 mt-8">
+        <div class="reveal rounded-xl border border-lime/30 bg-lime/5 p-7">
+          <h2 class="font-display italic font-extrabold text-3xl text-lime">MANFAAT</h2>
+          <ul class="mt-3 space-y-2 text-sm text-neutral-200">
+            <li class="flex gap-2"><span class="text-lime font-bold">✓</span> Mengetahui batas bawah energi yang dibutuhkan tubuh</li>
+            <li class="flex gap-2"><span class="text-lime font-bold">✓</span> Fondasi untuk menghitung kebutuhan kalori harian</li>
+            <li class="flex gap-2"><span class="text-lime font-bold">✓</span> Membantu merencanakan diet agar tidak terlalu ekstrem</li>
+            <li class="flex gap-2"><span class="text-lime font-bold">✓</span> Indeks lemak (FMI) dan indeks otot (FFMI) memantau progres lebih baik daripada berat badan saja</li>
+          </ul>
+        </div>
+        <div class="reveal rounded-xl border border-red-500/30 bg-red-500/5 p-7" data-delay="150">
+          <h2 class="font-display italic font-extrabold text-3xl text-red-400">RISIKO</h2>
+          <ul class="mt-3 space-y-2 text-sm text-neutral-200">
+            <li class="flex gap-2"><span class="text-red-400 font-bold">!</span> Hanya estimasi, tidak membedakan massa otot dan lemak</li>
+            <li class="flex gap-2"><span class="text-red-400 font-bold">!</span> Makan di bawah BMR dalam jangka panjang dapat menyebabkan kekurangan nutrisi dan kehilangan otot</li>
+            <li class="flex gap-2"><span class="text-red-400 font-bold">!</span> Kurang akurat pada kondisi medis tertentu, kehamilan, atau di bawah usia 18 tahun</li>
+            <li class="flex gap-2"><span class="text-red-400 font-bold">!</span> Persen lemak dari rumus bisa meleset beberapa poin (apalagi tanpa ukuran lingkar tubuh); alat seperti DEXA lebih akurat</li>
+            <li class="flex gap-2"><span class="text-red-400 font-bold">!</span> Terpaku pada angka lemak/otot dapat memicu citra tubuh negatif atau pola makan berlebihan</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    // gaya aktif untuk pilihan radio
+    const radios = document.querySelectorAll('input[name=gender]');
+    const syncRadio = () => radios.forEach(r => r.parentElement.classList.toggle('active', r.checked));
+    const syncHip = () => $('hip-wrap').classList.toggle('hidden', document.querySelector('input[name=gender]:checked').value !== 'female');
+    radios.forEach(r => r.addEventListener('change', () => { syncRadio(); syncHip(); })); syncRadio(); syncHip();
+
+    // Kategori (panduan kasar)
+    const bfCat = (bf, g) => {
+      const t = g === 'male' ? [[6, 'Esensial / sangat rendah'], [14, 'Atletis'], [18, 'Bugar'], [25, 'Rata-rata']] : [[14, 'Esensial / sangat rendah'], [21, 'Atletis'], [25, 'Bugar'], [32, 'Rata-rata']];
+      for (const [lim, name] of t) if (bf < lim) return name;
+      return 'Tinggi';
+    };
+    const fmiCat = (v, g) => {
+      const [a, b, c] = g === 'male' ? [3, 6, 9] : [5, 9, 13];
+      return v < a ? 'Rendah' : v < b ? 'Normal' : v < c ? 'Berlebih' : 'Sangat tinggi';
+    };
+    const ffmiCat = (v, g) => {
+      const t = g === 'male' ? [[18, 'Di bawah rata-rata'], [20, 'Rata-rata'], [22, 'Di atas rata-rata'], [25, 'Sangat tinggi']] : [[14, 'Di bawah rata-rata'], [17, 'Rata-rata'], [19, 'Di atas rata-rata'], [21, 'Sangat tinggi']];
+      for (const [lim, name] of t) if (v < lim) return name;
+      return 'Luar biasa tinggi';
+    };
+
+    function animate(el, to) {
+      const from = +el.textContent || 0, t0 = performance.now();
+      const tick = n => {
+        const t = Math.min((n - t0) / 900, 1);
+        el.textContent = Math.round(from + (to - from) * (1 - Math.pow(1 - t, 3)));
+        if (t < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
+
+    $('bmr-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const gender = document.querySelector('input[name=gender]:checked').value;
+      const age = +$('age').value, h = +$('height').value, w = +$('weight').value;
+      const err = $('err');
+      if (!age || !h || !w || age < 15 || h < 100 || w < 30) {
+        err.textContent = 'Periksa kembali data yang kamu isi.'; err.classList.remove('hidden'); return;
+      }
+      err.classList.add('hidden');
+      const bmr = Math.round(10 * w + 6.25 * h - 5 * age + (gender === 'male' ? 5 : -161));
+      animate($('bmr-val'), bmr);
+      $('bmr-hour').textContent = Math.round(bmr / 24);
+      $('bmr-extra').classList.remove('hidden');
+      $('bmr-hint').classList.add('hidden');
+      $('to-kalori').href = `kalori.html?gender=${gender}&age=${age}&height=${h}&weight=${w}`;
+
+      // ===== Komposisi tubuh =====
+      const waist = +$('waist').value, neck = +$('neck').value, hip = +$('hip').value;
+      const hm = h / 100, bmi = w / (hm * hm);
+      let bf, method;
+      if (gender === 'male' && waist > neck && neck > 0) {
+        bf = 495 / (1.0324 - 0.19077 * Math.log10(waist - neck) + 0.15456 * Math.log10(h)) - 450;
+        method = 'Metode: US Navy (lingkar tubuh)';
+      } else if (gender === 'female' && waist > 0 && neck > 0 && hip > 0 && waist + hip > neck) {
+        bf = 495 / (1.29579 - 0.35004 * Math.log10(waist + hip - neck) + 0.22100 * Math.log10(h)) - 450;
+        method = 'Metode: US Navy (lingkar tubuh)';
+      } else {
+        bf = 1.20 * bmi + 0.23 * age - 10.8 * (gender === 'male' ? 1 : 0) - 5.4;
+        method = 'Metode: estimasi dari BMI (Deurenberg), isi lingkar tubuh untuk hasil lebih baik';
+      }
+      bf = Math.min(60, Math.max(3, bf));
+      const fm = w * bf / 100, lbm = w - fm;
+      const fmi = fm / (hm * hm), ffmi = lbm / (hm * hm);
+
+      $('c-bf').textContent = bf.toFixed(1);
+      $('c-fm').textContent = fm.toFixed(1);
+      $('c-lbm').textContent = lbm.toFixed(1);
+      $('c-fmi').textContent = fmi.toFixed(1);
+      $('c-ffmi').textContent = ffmi.toFixed(1);
+      $('c-bfcat').textContent = bfCat(bf, gender);
+      $('c-fmicat').textContent = fmiCat(fmi, gender);
+      $('c-ffmicat').textContent = ffmiCat(ffmi, gender);
+      $('c-method').textContent = method;
+      $('c-barfat').style.width = (100 - lbm / w * 100) + '%';
+      $('c-barlbm').style.width = (lbm / w * 100) + '%';
+      $('comp').classList.remove('hidden');
+    });
+  </script>
+  <script src="assets/app.js"></script>
+</body>
+</html>

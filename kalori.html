@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hitung Kalori Harian — Sportify</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,700;1,800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="assets/tw-config.js"></script>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="kalori" class="loading">
+
+  <div id="preloader">
+    <div class="pl-inner">
+      <div class="pl-logo">SPORT<span>IFY</span></div>
+      <div id="pl-num">0%</div>
+      <div class="pl-track"><div id="pl-bar"></div></div>
+      <div class="pl-text">Memuat...</div>
+    </div>
+  </div>
+  <div id="scroll-progress"></div>
+  <header id="site-header"></header>
+
+  <main class="pt-32">
+    <section class="max-w-5xl mx-auto px-5">
+      <p class="reveal text-lime font-bold text-sm tracking-[.2em]"><span class="slashes"></span> KALKULATOR</p>
+      <h1 class="reveal font-display italic font-extrabold text-6xl md:text-8xl leading-[.9] mt-3" data-delay="100">KALORI <span class="text-lime">HARIAN</span></h1>
+      <p class="reveal mt-5 text-neutral-300 max-w-2xl" data-delay="200">
+        Hitung total kebutuhan energi harian (TDEE) dari BMR dan tingkat aktivitasmu, lalu tentukan target sesuai tujuan.
+      </p>
+
+      <div class="grid lg:grid-cols-2 gap-6 mt-10">
+        <form id="kal-form" class="reveal spot p-7 space-y-5">
+          <div>
+            <label class="text-sm font-bold">Jenis Kelamin</label>
+            <div class="grid grid-cols-2 gap-3 mt-2">
+              <label class="chip text-center ripple"><input type="radio" name="gender" value="male" class="hidden" checked> Pria</label>
+              <label class="chip text-center ripple"><input type="radio" name="gender" value="female" class="hidden"> Wanita</label>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-3">
+            <div><label class="text-sm font-bold">Umur</label><input id="age" type="number" min="15" max="100" placeholder="tahun" class="field mt-2" required></div>
+            <div><label class="text-sm font-bold">Tinggi</label><input id="height" type="number" min="100" max="250" placeholder="cm" class="field mt-2" required></div>
+            <div><label class="text-sm font-bold">Berat</label><input id="weight" type="number" min="30" max="300" step="0.1" placeholder="kg" class="field mt-2" required></div>
+          </div>
+          <div>
+            <label class="text-sm font-bold">Tingkat Aktivitas</label>
+            <select id="activity" class="field mt-2">
+              <option value="1.2">Sangat jarang olahraga (kerja duduk)</option>
+              <option value="1.375">Ringan (olahraga 1–3 hari/minggu)</option>
+              <option value="1.55" selected>Sedang (olahraga 3–5 hari/minggu)</option>
+              <option value="1.725">Berat (olahraga 6–7 hari/minggu)</option>
+              <option value="1.9">Sangat berat (atlet / pekerjaan fisik + latihan)</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-sm font-bold">Tujuan</label>
+            <select id="goal" class="field mt-2">
+              <option value="-500">Turunkan berat badan (−500 kkal)</option>
+              <option value="0" selected>Pertahankan berat badan</option>
+              <option value="300">Naikkan berat badan (+300 kkal)</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-lime w-full justify-center">Hitung Kalori</button>
+          <p id="err" class="text-sm text-red-400 hidden"></p>
+        </form>
+
+        <div class="reveal spot p-7" data-delay="150">
+          <p class="text-xs font-bold tracking-[.25em] text-neutral-400 text-center">TARGET KALORI HARIAN</p>
+          <p class="font-display italic font-extrabold text-8xl text-lime leading-none mt-2 text-center"><span id="target">0</span></p>
+          <p class="text-neutral-400 mt-1 text-center">kalori / hari</p>
+
+          <div id="detail" class="hidden mt-6 space-y-4">
+            <div class="grid grid-cols-2 gap-3 text-center">
+              <div class="rounded-lg bg-ink border border-line p-3"><p class="text-xs text-neutral-400">BMR</p><p class="font-bold text-xl" id="r-bmr">0</p></div>
+              <div class="rounded-lg bg-ink border border-line p-3"><p class="text-xs text-neutral-400">TDEE (jaga berat)</p><p class="font-bold text-xl" id="r-tdee">0</p></div>
+            </div>
+            <div>
+              <p class="text-xs font-bold tracking-widest text-neutral-400 mb-2">PERKIRAAN MAKRO</p>
+              <div class="space-y-3 text-sm">
+                <div><div class="flex justify-between"><span>Protein</span><b id="m-p"></b></div><div class="h-2 rounded bg-line mt-1"><div id="b-p" class="h-2 rounded bg-lime transition-all duration-700" style="width:0"></div></div></div>
+                <div><div class="flex justify-between"><span>Karbohidrat</span><b id="m-c"></b></div><div class="h-2 rounded bg-line mt-1"><div id="b-c" class="h-2 rounded bg-yellow-400 transition-all duration-700" style="width:0"></div></div></div>
+                <div><div class="flex justify-between"><span>Lemak</span><b id="m-f"></b></div><div class="h-2 rounded bg-line mt-1"><div id="b-f" class="h-2 rounded bg-sky-400 transition-all duration-700" style="width:0"></div></div></div>
+              </div>
+            </div>
+            <p id="warn" class="hidden text-sm rounded-lg border border-yellow-400/40 bg-yellow-400/10 text-yellow-200 p-3"></p>
+          </div>
+          <p id="hint" class="text-sm text-neutral-500 mt-6 text-center">Isi data lalu tekan “Hitung Kalori”.</p>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 mt-8">
+        <div class="reveal rounded-xl border border-lime/30 bg-lime/5 p-7">
+          <h2 class="font-display italic font-extrabold text-3xl text-lime">MANFAAT</h2>
+          <ul class="mt-3 space-y-2 text-sm text-neutral-200">
+            <li class="flex gap-2"><span class="text-lime font-bold">✓</span> Target makan yang terukur sesuai tujuanmu</li>
+            <li class="flex gap-2"><span class="text-lime font-bold">✓</span> Turun atau naik berat badan secara bertahap dan terkontrol</li>
+            <li class="flex gap-2"><span class="text-lime font-bold">✓</span> Meningkatkan kesadaran akan porsi dan komposisi makanan</li>
+          </ul>
+        </div>
+        <div class="reveal rounded-xl border border-red-500/30 bg-red-500/5 p-7" data-delay="150">
+          <h2 class="font-display italic font-extrabold text-3xl text-red-400">RISIKO</h2>
+          <ul class="mt-3 space-y-2 text-sm text-neutral-200">
+            <li class="flex gap-2"><span class="text-red-400 font-bold">!</span> Defisit terlalu besar menurunkan energi, mengurangi massa otot, dan mengganggu hormon</li>
+            <li class="flex gap-2"><span class="text-red-400 font-bold">!</span> Terlalu fokus menghitung kalori dapat memicu pola makan tidak sehat</li>
+            <li class="flex gap-2"><span class="text-red-400 font-bold">!</span> Angka hanya estimasi, sesuaikan dengan perkembangan berat badan 2–4 minggu</li>
+            <li class="flex gap-2"><span class="text-red-400 font-bold">!</span> Ibu hamil/menyusui, remaja, dan penderita penyakit kronis sebaiknya berkonsultasi dengan tenaga medis</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const radios = document.querySelectorAll('input[name=gender]');
+    const syncRadio = () => radios.forEach(r => r.parentElement.classList.toggle('active', r.checked));
+    radios.forEach(r => r.addEventListener('change', syncRadio));
+
+    // Isi otomatis dari halaman BMR (query string)
+    const p = new URLSearchParams(location.search);
+    if (p.get('gender')) document.querySelector(`input[name=gender][value=${p.get('gender') === 'female' ? 'female' : 'male'}]`).checked = true;
+    if (p.get('age')) $('age').value = +p.get('age') || '';
+    if (p.get('height')) $('height').value = +p.get('height') || '';
+    if (p.get('weight')) $('weight').value = +p.get('weight') || '';
+    syncRadio();
+
+    function animate(el, to) {
+      const from = +el.textContent || 0, t0 = performance.now();
+      const tick = n => {
+        const t = Math.min((n - t0) / 900, 1);
+        el.textContent = Math.round(from + (to - from) * (1 - Math.pow(1 - t, 3)));
+        if (t < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
+
+    $('kal-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const gender = document.querySelector('input[name=gender]:checked').value;
+      const age = +$('age').value, h = +$('height').value, w = +$('weight').value;
+      const err = $('err');
+      if (!age || !h || !w || age < 15 || h < 100 || w < 30) {
+        err.textContent = 'Periksa kembali data yang kamu isi.'; err.classList.remove('hidden'); return;
+      }
+      err.classList.add('hidden');
+
+      const bmr = Math.round(10 * w + 6.25 * h - 5 * age + (gender === 'male' ? 5 : -161));
+      const tdee = Math.round(bmr * +$('activity').value);
+      let target = tdee + +$('goal').value;
+      const warn = $('warn');
+      warn.classList.add('hidden');
+      if (target < bmr) {
+        target = bmr;
+        warn.textContent = 'Target dinaikkan ke level BMR karena makan di bawah BMR tidak disarankan. Turunkan berat badan lebih pelan atau tambah aktivitas.';
+        warn.classList.remove('hidden');
+      }
+
+      // makro: protein 1,8 g/kg, lemak 25% kalori, sisanya karbohidrat
+      const protein = Math.round(1.8 * w);
+      const fat = Math.round(target * 0.25 / 9);
+      const carb = Math.max(0, Math.round((target - protein * 4 - fat * 9) / 4));
+      const total = protein * 4 + carb * 4 + fat * 9 || 1;
+
+      animate($('target'), target);
+      $('r-bmr').textContent = bmr; $('r-tdee').textContent = tdee;
+      $('m-p').textContent = protein + ' g'; $('m-c').textContent = carb + ' g'; $('m-f').textContent = fat + ' g';
+      $('b-p').style.width = (protein * 4 / total * 100) + '%';
+      $('b-c').style.width = (carb * 4 / total * 100) + '%';
+      $('b-f').style.width = (fat * 9 / total * 100) + '%';
+      $('detail').classList.remove('hidden');
+      $('hint').classList.add('hidden');
+    });
+  </script>
+  <script src="assets/app.js"></script>
+</body>
+</html>

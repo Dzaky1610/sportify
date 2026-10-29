@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Expert Latihan — Sportify</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,700;1,800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="assets/tw-config.js"></script>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="latihan" class="loading">
+
+  <div id="preloader">
+    <div class="pl-inner">
+      <div class="pl-logo">SPORT<span>IFY</span></div>
+      <div id="pl-num">0%</div>
+      <div class="pl-track"><div id="pl-bar"></div></div>
+      <div class="pl-text">Memuat...</div>
+    </div>
+  </div>
+  <div id="scroll-progress"></div>
+  <header id="site-header"></header>
+
+  <main class="pt-32">
+    <!-- Judul -->
+    <section class="max-w-7xl mx-auto px-5">
+      <p class="reveal text-lime font-bold text-sm tracking-[.2em]"><span class="slashes"></span> EXPERT LATIHAN</p>
+      <h1 class="reveal font-display italic font-extrabold text-6xl md:text-8xl leading-[.9] mt-3" data-delay="100">KUASAI <span class="text-lime">TEKNIK SET</span></h1>
+      <p class="reveal mt-5 text-neutral-300 max-w-2xl" data-delay="200">
+        Set dan repetisi (rep) menentukan hasil latihanmu. Pelajari tiap teknik: berapa set, bagaimana caranya, kapan dipakai, plus risiko dan manfaatnya. Klik tombol video untuk belajar langsung dari tutorial YouTube.
+      </p>
+    </section>
+
+    <!-- Dasar -->
+    <section class="max-w-7xl mx-auto px-5 mt-14">
+      <div class="grid md:grid-cols-3 gap-5">
+        <div class="reveal spot tilt p-6">
+          <p class="text-lime font-bold text-xs tracking-widest">KEKUATAN</p>
+          <p class="font-display italic font-extrabold text-5xl mt-1">1–5 <span class="text-2xl">rep</span></p>
+          <p class="text-sm text-neutral-400 mt-2">Beban berat, istirahat lebih lama (2–5 menit).</p>
+        </div>
+        <div class="reveal spot tilt p-6" data-delay="100">
+          <p class="text-lime font-bold text-xs tracking-widest">PEMBESARAN OTOT</p>
+          <p class="font-display italic font-extrabold text-5xl mt-1">6–12 <span class="text-2xl">rep</span></p>
+          <p class="text-sm text-neutral-400 mt-2">Rentang paling umum, istirahat 60–120 detik.</p>
+        </div>
+        <div class="reveal spot tilt p-6" data-delay="200">
+          <p class="text-lime font-bold text-xs tracking-widest">DAYA TAHAN</p>
+          <p class="font-display italic font-extrabold text-5xl mt-1">12–20+ <span class="text-2xl">rep</span></p>
+          <p class="text-sm text-neutral-400 mt-2">Beban ringan, istirahat singkat (30–60 detik).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filter -->
+    <section class="max-w-7xl mx-auto px-5 mt-16">
+      <div class="flex flex-wrap items-center gap-3" id="filters">
+        <span class="text-sm text-neutral-400 mr-2">Tingkat:</span>
+        <button class="chip active" data-level="all">Semua</button>
+        <button class="chip" data-level="Pemula">Pemula</button>
+        <button class="chip" data-level="Menengah">Menengah</button>
+        <button class="chip" data-level="Lanjut">Lanjut</button>
+      </div>
+      <div id="set-list" class="mt-8 grid lg:grid-cols-2 gap-6"></div>
+    </section>
+
+    <!-- Peringatan umum -->
+    <section class="max-w-7xl mx-auto px-5 mt-20">
+      <div class="reveal rounded-xl border border-red-500/30 bg-red-500/5 p-6 md:p-8">
+        <h2 class="font-display italic font-extrabold text-3xl text-red-400">⚠ RISIKO UMUM LATIHAN BERAT</h2>
+        <ul class="mt-3 grid md:grid-cols-2 gap-x-8 gap-y-2 text-sm text-neutral-300 list-disc pl-5">
+          <li>Teknik intensitas tinggi (drop set, rest-pause, giant set) menambah beban pada otot, sendi, dan sistem saraf.</li>
+          <li>Terlalu sering memakai teknik “sampai gagal” dapat memicu kelelahan berlebih (overtraining) dan memperlambat pemulihan.</li>
+          <li>Gunakan spotter atau mesin yang aman saat mendekati titik gagal pada beban berat.</li>
+          <li>Hentikan latihan bila muncul nyeri tajam, pusing, atau sesak napas, dan periksakan ke tenaga medis.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script>
+    // Ganti nilai "yt" dengan link video YouTube spesifik pilihanmu (mis. https://www.youtube.com/watch?v=XXXX)
+    const q = s => 'https://www.youtube.com/results?search_query=' + encodeURIComponent(s);
+    const sets = [
+      {
+        name: 'Straight Set', level: 'Pemula', scheme: '3–4 set × 8–12 rep', rest: 'Istirahat 60–120 detik',
+        desc: 'Set biasa: lakukan satu gerakan untuk jumlah rep tertentu, istirahat, lalu ulangi gerakan yang sama.',
+        steps: ['Pilih beban yang membuatmu hampir gagal di rep terakhir', 'Lakukan 8–12 rep dengan teknik rapi', 'Istirahat, lalu ulangi sampai set selesai'],
+        benefit: ['Paling mudah dipelajari dan dipantau progresnya', 'Risiko cedera relatif rendah', 'Cocok untuk membangun fondasi teknik'],
+        risk: ['Bisa terasa monoton', 'Progres melambat jika beban tidak dinaikkan bertahap'],
+        yt: q('straight set vs superset penjelasan latihan beban')
+      },
+      {
+        name: 'Superset', level: 'Menengah', scheme: '3 set × 2 gerakan (10–12 rep)', rest: 'Tanpa jeda antar gerakan, istirahat 60–90 detik setelah pasangan',
+        desc: 'Dua gerakan dilakukan berurutan tanpa istirahat. Bisa otot berlawanan (biceps–triceps) atau otot yang sama.',
+        steps: ['Pilih dua gerakan, mis. barbell curl lalu triceps pushdown', 'Lakukan gerakan A, langsung pindah ke gerakan B', 'Istirahat setelah keduanya selesai, ulangi 3 set'],
+        benefit: ['Menghemat waktu latihan', 'Meningkatkan intensitas dan pembakaran kalori', 'Pasangan otot berlawanan memungkinkan pemulihan antar gerakan'],
+        risk: ['Beban mungkin turun karena kelelahan', 'Napas dan fokus bisa terganggu jika terlalu cepat', 'Gym ramai membuat alat sulit diganti-ganti'],
+        yt: q('cara superset yang benar untuk pemula')
+      },
+      {
+        name: 'Drop Set', level: 'Menengah', scheme: '1–2 set terakhir: 3 tingkat beban', rest: 'Tanpa istirahat, kurangi beban 20–30% tiap tingkat',
+        desc: 'Lakukan rep hingga hampir gagal, turunkan beban dengan cepat, lanjut lagi, ulangi 2–3 kali.',
+        steps: ['Lakukan set normal sampai hampir gagal', 'Kurangi beban 20–30% dan langsung lanjutkan', 'Ulangi penurunan 2–3 kali, istirahat panjang setelahnya'],
+        benefit: ['Menambah stimulus otot di akhir latihan', 'Efisien untuk “finisher” satu kelompok otot', 'Melatih ketahanan otot pada kondisi lelah'],
+        risk: ['Sangat melelahkan, pemulihan lebih lama', 'Risiko cedera meningkat bila teknik runtuh', 'Jangan dipakai di semua gerakan atau tiap sesi'],
+        yt: q('drop set tutorial cara yang benar')
+      },
+      {
+        name: 'Pyramid Set', level: 'Menengah', scheme: '4–5 set: beban naik, rep turun', rest: 'Istirahat 90–120 detik',
+        desc: 'Mulai dari beban ringan dengan rep banyak, naikkan beban tiap set sambil menurunkan jumlah rep.',
+        steps: ['Set 1: 12 rep beban ringan', 'Set 2–3: naikkan beban, rep turun (10, 8)', 'Set terakhir: beban terberat, 6 rep'],
+        benefit: ['Pemanasan alami sebelum beban berat', 'Melatih kekuatan sekaligus volume', 'Lebih aman untuk sendi karena naik bertahap'],
+        risk: ['Bisa membuang tenaga di set awal', 'Perlu mencatat beban agar tidak salah hitung'],
+        yt: q('pyramid set latihan beban penjelasan')
+      },
+      {
+        name: 'Reverse Pyramid', level: 'Lanjut', scheme: '3 set: beban terberat dulu', rest: 'Istirahat 2–3 menit',
+        desc: 'Kebalikan pyramid: mulai dari set terberat saat tenaga masih penuh, lalu kurangi beban dan tambah rep.',
+        steps: ['Pemanasan bertahap dulu', 'Set 1: beban terberat, 5–6 rep', 'Set 2–3: turunkan beban ±10%, rep naik'],
+        benefit: ['Kekuatan maksimal di set paling segar', 'Volume tetap terjaga', 'Waktu latihan efisien'],
+        risk: ['Wajib pemanasan memadai, otot dingin + beban berat = rawan cedera', 'Butuh spotter pada gerakan seperti bench press'],
+        yt: q('reverse pyramid training tutorial')
+      },
+      {
+        name: 'Giant Set', level: 'Lanjut', scheme: '3 set × 3–4 gerakan', rest: 'Tanpa jeda antar gerakan, istirahat 2 menit per putaran',
+        desc: 'Seperti superset, tapi 3 gerakan atau lebih untuk otot yang sama secara berurutan.',
+        steps: ['Pilih 3–4 gerakan satu kelompok otot', 'Lakukan berurutan tanpa jeda', 'Istirahat penuh lalu ulangi'],
+        benefit: ['Pump otot sangat besar', 'Membakar banyak kalori', 'Latihan padat dan singkat'],
+        risk: ['Kelelahan ekstrem dan teknik mudah rusak', 'Sulit mengukur progres beban', 'Tidak cocok untuk pemula'],
+        yt: q('giant set workout explained')
+      },
+      {
+        name: 'Rest-Pause', level: 'Lanjut', scheme: '1 set utama + 2–3 mini-set', rest: 'Jeda 10–20 detik antar mini-set',
+        desc: 'Lakukan set sampai hampir gagal, istirahat sangat singkat, lanjut beberapa rep lagi, ulangi.',
+        steps: ['Lakukan set sampai 1–2 rep sebelum gagal', 'Istirahat 10–20 detik', 'Lanjut rep tambahan, ulangi 2–3 kali'],
+        benefit: ['Menambah volume dengan beban berat', 'Efisien untuk satu gerakan utama', 'Melatih kekuatan di kondisi lelah'],
+        risk: ['Sangat menguras sistem saraf', 'Risiko cedera jika dipaksa melewati teknik yang benar', 'Pakai spotter pada beban berat'],
+        yt: q('rest pause set tutorial')
+      }
+    ];
+
+    const li = (arr, mark, cls) => arr.map(t => `<li class="flex gap-2"><span class="${cls} font-bold">${mark}</span><span>${t}</span></li>`).join('');
+    const levelColor = { Pemula: 'bg-lime text-ink', Menengah: 'bg-yellow-400 text-ink', Lanjut: 'bg-red-500 text-white' };
+
+    const list = document.getElementById('set-list');
+    function render(level) {
+      const data = level === 'all' ? sets : sets.filter(s => s.level === level);
+      list.innerHTML = data.map((s, i) => `
+        <article class="reveal spot tilt p-7 flex flex-col" data-delay="${(i % 2) * 120}">
+          <div class="flex items-start justify-between gap-3">
+            <h3 class="font-display italic font-extrabold text-4xl leading-none">${s.name}</h3>
+            <span class="text-[11px] font-bold px-3 py-1 rounded-full ${levelColor[s.level]}">${s.level}</span>
+          </div>
+          <div class="mt-4 rounded-lg bg-ink border border-line p-4">
+            <p class="text-lime font-bold">${s.scheme}</p>
+            <p class="text-xs text-neutral-400 mt-1">${s.rest}</p>
+          </div>
+          <p class="text-neutral-300 text-sm mt-4">${s.desc}</p>
+          <ol class="mt-3 text-sm text-neutral-400 list-decimal pl-5 space-y-1">${s.steps.map(t => `<li>${t}</li>`).join('')}</ol>
+          <div class="mt-5 flex flex-wrap gap-3">
+            <a href="${s.yt}" target="_blank" rel="noopener" class="btn btn-lime">▶ Tonton Tutorial</a>
+            <button type="button" data-toggle data-target="sp-${i}" class="btn btn-ghost">Manfaat &amp; Risiko <span class="chev">▾</span></button>
+          </div>
+          <div id="sp-${i}" class="panel">
+            <div class="grid sm:grid-cols-2 gap-4 pt-5">
+              <div class="rounded-lg border border-lime/30 bg-lime/5 p-4"><h4 class="font-bold text-lime text-sm tracking-widest mb-2">MANFAAT</h4><ul class="space-y-2 text-sm">${li(s.benefit, '✓', 'text-lime')}</ul></div>
+              <div class="rounded-lg border border-red-500/30 bg-red-500/5 p-4"><h4 class="font-bold text-red-400 text-sm tracking-widest mb-2">RISIKO</h4><ul class="space-y-2 text-sm">${li(s.risk, '!', 'text-red-400')}</ul></div>
+            </div>
+          </div>
+        </article>`).join('');
+      if (window.Sportify) Sportify.refresh();
+    }
+    render('all');
+
+    document.getElementById('filters').addEventListener('click', e => {
+      const c = e.target.closest('.chip');
+      if (!c) return;
+      document.querySelectorAll('#filters .chip').forEach(x => x.classList.remove('active'));
+      c.classList.add('active');
+      render(c.dataset.level);
+    });
+  </script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
